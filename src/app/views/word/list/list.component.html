@@ -1,0 +1,60 @@
+<button nz-button nzType="primary" (click)="visible = true">新增</button>
+
+<!-- 搜索 -->
+<form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">单词</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
+      <input formControlName="word" nz-input placeholder="请输入单词" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">中文</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
+      <input formControlName="chinese" nz-input placeholder="中文意思" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <button nz-button nzType="primary" [disabled]="!validateForm.valid">搜索</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<!-- 列表 -->
+<nz-table #basicTable [nzData]="dataSet">
+  <thead>
+    <tr>
+      <th>单词</th>
+      <th>行业分类</th>
+      <th>中文意思</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td>{{data.word}}</td>
+      <td>{{data.category}}</td>
+      <td>{{data.chinese}}</td>
+      <td>
+        <a (click)="editWordHandle(data)">修改</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a>删除</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<!-- <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" nzTitle="录入单词" (nzOnClose)="visible = false">
+</nz-drawer> -->
+
+<nz-modal [(nzVisible)]="visible" 
+          [nzTitle]="editWord ? '修改单词' : '录入单词'" 
+          [nzOkDisabled]="newWordForm.invalid" 
+          [nzOkLoading]="saving" 
+          [nzFooter]="null"
+          (nzOnCancel)="handleCancel()" 
+          (nzOnOk)="handleOk()"
+          (nzAfterClose)="resetForm()">
+  <yc-word-form [categories]="categories" [formData]="editWord" (submitForm)="handleOk($event)"></yc-word-form>
+</nz-modal>
