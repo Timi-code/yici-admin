@@ -1,6 +1,9 @@
+/**
+ * 单词
+ */
 export interface Word {
-  id?: number;
-  word: string;
-  category: number;
-  chinese: string;
+  id?: number; // 单词id
+  word: string; // 单词
+  category: number; // 分类id
+  chinese: string; // 中文意思
 }

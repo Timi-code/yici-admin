@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { WordService, CategoryService } from '@services/index';
-import { Category, Word } from '@models/index';
+import { Category, Word, ListParam, Result } from '@models/index';
 import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
@@ -11,105 +10,136 @@ import { NzMessageService } from 'ng-zorro-antd';
 })
 export class ListComponent implements OnInit {
 
+  @HostListener('window:resize')
+  onscroll() {
+    this.setScrollConfig();
+  }
+
+  searchText: string;
+  categoryType: { [key: string]: string } = {}; // 分类汉字
   visible: boolean; // 抽屉
-  validateForm: FormGroup; // 搜索表单
-  newWordForm: FormGroup; // 添加表单
-  saving: boolean; // 保持中
-  dataSet: Word[] = [];
-  categories: Category[];
-  editWord: Word;
+  loading: boolean; // 保存loading
+  dataSet: Word[] = []; // 单词列表
+  categories: Category[]; // 单词分类
+  editWord: Word; // 当前编辑的单词
+  scrollConfig: { y: string } = { y: '300px' }; // 表格滚动配置
+
+  currentPage: number = 1; // 当前页码
+  pageSize: number = 5; // 每页条数
+  total: number; // 总条数
+  listParams: ListParam; // 列表查询参数
 
   constructor(
-    private fb: FormBuilder,
     private message: NzMessageService,
     private wordService: WordService,
     private categoryService: CategoryService
   ) { }
 
   ngOnInit() {
-    this.initValidateForm();
-    this.initNewWordForm();
+    this.listParams = {
+      currentPage: this.currentPage - 1,
+      pageSize: this.pageSize,
+      search: this.searchText
+    }
     this.getWordList();
     this.getWordCategory();
+    this.setScrollConfig();
   }
 
-  // 搜索表单
-  initValidateForm() {
-    this.validateForm = this.fb.group({
-      word: [],
-      chinese: []
-    });
-  }
-
-  // 添加新单词表单
-  initNewWordForm() {
-    this.newWordForm = this.fb.group({
-      word: ['', [Validators.required]],
-      category: [null, [Validators.required]],
-      chinese: ['', [Validators.required]]
-    });
-  }
-
-  resetForm() {
-    this.newWordForm.reset();
-  }
-
-  handleCancel() {
+  closeModal() {
     this.visible = false;
-    this.editWord = null;
   }
 
+  /**
+   * 确定
+   * @param word 保存的单词和修改单词
+   */
   handleOk(word: Word) {
-    console.log(word);
     if (this.editWord) {
-      this.wordService.updateWord(word)
-        .subscribe(data => {
-          console.log(data);
-          if (data) {
-            this.getWordList();
-            this.message.success('修改成功');
-            this.visible = false;
-          }
-        });
+      this.updateWord(word);
     } else {
-      this.wordService.saveWord(this.newWordForm.value)
-        .subscribe(data => {
-          if (data) {
-            this.message.success('添加成功');
-            this.visible = false;
-            this.getWordList();
-          }
-        });
+      this.saveWord(word);
     }
   }
 
+  /**
+   * 修改单词
+   * @param data 编辑的单词
+   */
   editWordHandle(data: Word) {
     this.visible = true;
     this.editWord = data;
   }
 
-  submitForm() {
-    console.log(this.validateForm.value);
-    // this.wordService.saveWord(this.validateForm.value)
-    //   .subscribe(data => {
-    //     console.log(data);
-    //   });
-  }
-
-  // 获取单词列表
-  getWordList() {
-    this.wordService.getWordList()
-      .subscribe((data: Word[]) => {
-        console.log(data);
-        this.dataSet = data;
+  /**
+   * 保存新单词
+   * @param word 新单词
+   */
+  saveWord(word: Word) {
+    this.wordService.saveWord(word)
+      .subscribe(data => {
+        if (data) {
+          this.message.success('添加成功');
+          this.getWordList();
+          this.closeModal();
+        }
       });
   }
 
-  // 获取单词分类
+  /**
+   * 更新单词
+   * @param word 单词
+   */
+  updateWord(word: Word) {
+    this.wordService.updateWord(word)
+      .subscribe(data => {
+        if (data) {
+          this.message.success('修改成功');
+          this.getWordList();
+          this.closeModal();
+        }
+      });
+  }
+
+  /**
+   * 获取单词列表
+   */
+  getWordList() {
+    if (this.loading) return;
+    this.loading = true
+    this.listParams = { currentPage: this.currentPage - 1, pageSize: this.pageSize, search: this.searchText };
+    this.wordService.getWordList(this.listParams)
+      .subscribe((data: Result<Word[]>) => {
+        if (data.code === 200) {
+          this.total = data.total;
+          this.dataSet = data.data;
+        }
+      }, err => {
+        console.log(err);
+      }, () => {
+        this.loading = false;
+      });
+  }
+
+  /**
+   * 获取单词分类
+   */
   getWordCategory() {
     this.categoryService.getCategories()
-      .subscribe(data => {
+      .subscribe((data: Category[]) => {
         this.categories = data;
+        data.forEach(item => {
+          this.categoryType[item.id] = item.name;
+        })
       });
+  }
+
+  /**
+   * 设置scrollconfig
+   */
+  setScrollConfig() {
+    this.scrollConfig = {
+      y: document.body.scrollHeight - 430 + 'px'
+    }
   }
 }

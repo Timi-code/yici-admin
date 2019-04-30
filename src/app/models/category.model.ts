@@ -1,4 +1,7 @@
+/**
+ * 单词分类
+ */
 export interface Category {
-  id: number;
-  name: string;
+  id: number; // 分类id
+  name: string; // 分类名字
 }

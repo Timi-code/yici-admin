@@ -38,9 +38,8 @@ export class FormComponent implements OnInit {
   }
 
 
-  // 添加新单词表单
+  // 初始化新单词表单
   initNewWordForm() {
-    console.log(this.formData);
     const formData = this.formData || new FormData();
     this.validateForm = this.fb.group({
       id: [formData.id],
@@ -50,8 +49,10 @@ export class FormComponent implements OnInit {
     });
   }
 
+  /**
+   * 确定
+   */
   handleOk() {
-    console.log(this.validateForm.value);
     this.submitForm.emit(this.validateForm.value);
   }
 

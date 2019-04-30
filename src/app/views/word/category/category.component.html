@@ -1,16 +1,8 @@
-<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-  <nz-form-item>
-    <nz-form-label [nzSpan]="5" nzRequired nzFor="name">分类名称</nz-form-label>
-    <nz-form-control [nzSpan]="12">
-      <input id="name" type="text" nz-input formControlName="name" />
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-control [nzSpan]="12" [nzOffset]="5">
-      <button nz-button nzType="primary" [disabled]="validateForm.invalid">Submit</button>
-    </nz-form-control>
-  </nz-form-item>
-</form>
+<div nz-row>
+  <div nz-col nzSpan="6" nzOffset="6">
+    <input type="text" nz-input placeholder="添加分类" [(ngModel)]="name" (keyup.enter)="saveCategory()"/>
+  </div>
+</div>
 
 <section class="category-wrap" *ngIf="categories">
   <div class="item" *ngFor="let item of categories" [ngStyle]="{'background': randomColor}">{{item.name}}</div>

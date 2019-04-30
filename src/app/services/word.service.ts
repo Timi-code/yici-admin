@@ -11,8 +11,8 @@ export class WordService {
     private http: HttpClient
   ) { }
 
-  getWordList(): Observable<any> {
-    return this.http.get('/api/word');
+  getWordList(params?: any): Observable<any> {
+    return this.http.get('/api/word', {params: params});
   }
 
   saveWord(params): Observable<any> {

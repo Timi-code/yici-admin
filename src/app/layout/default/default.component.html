@@ -1,23 +1,13 @@
 <nz-layout class="layout">
   <nz-header>
     <div class="logo">YC</div>
-    <!-- <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'" style="line-height: 64px;">
-      <li nz-menu-item>nav 1</li>
-      <li nz-menu-item>nav 2</li>
-      <li nz-menu-item>nav 3</li>
-    </ul> -->
   </nz-header>
   <nz-content class="layout-content">
-    <!-- <nz-breadcrumb style="margin:16px 0;">
-      <nz-breadcrumb-item>Home</nz-breadcrumb-item>
-      <nz-breadcrumb-item>List</nz-breadcrumb-item>
-      <nz-breadcrumb-item>App</nz-breadcrumb-item>
-    </nz-breadcrumb> -->
     <nz-layout style="padding:24px 0; background: #fff">
       <nz-sider [nzWidth]="200" style="background:#fff">
         <ul nz-menu [nzMode]="'inline'" style="height:100%">
             <li nz-menu-item routerLink="/word/list" routerLinkActive="ant-menu-item-selected">单词列表</li>
-            <li nz-menu-item routerLink="/word/category" routerLinkActive="ant-menu-item-selected">单词分类</li>
+            <li nz-menu-item routerLink="/word/category" routerLinkActive="ant-menu-item-selected">行业分类</li>
         </ul>
       </nz-sider>
       <nz-content style="padding: 0 24px; min-height: 280px;">

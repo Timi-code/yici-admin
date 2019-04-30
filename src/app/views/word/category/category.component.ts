@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CategoryService } from './../../../services/category.service';
 import { Category } from '../../../models';
 
@@ -11,28 +10,26 @@ import { Category } from '../../../models';
 })
 export class CategoryComponent implements OnInit {
 
-  validateForm: FormGroup;
+  name: string;
   categories: Category[];
   // tslint:disable-next-line:max-line-length
   randomColor = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, .5)`;
 
   constructor(
-    private fb: FormBuilder,
     private categoryService: CategoryService
   ) { }
 
   ngOnInit() {
-    this.initForm();
     this.getCategories();
   }
 
-  initForm() {
-    this.validateForm = this.fb.group({
-      name: ['', [Validators.required]]
-    });
+  saveCategory() {
+    this.categoryService.saveCategory(this.name)
+      .subscribe(() => {
+        this.name = '';
+        this.getCategories();
+      });
   }
-
-  saveCategory() { }
 
   getCategories() {
     this.categoryService.getCategories()
@@ -40,12 +37,4 @@ export class CategoryComponent implements OnInit {
         this.categories = data;
       });
   }
-
-  submitForm() {
-    this.categoryService.saveCategory(this.validateForm.value)
-      .subscribe(() => {
-        this.getCategories();
-      });
-  }
-
 }
