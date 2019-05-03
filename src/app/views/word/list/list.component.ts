@@ -1,7 +1,8 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { WordService, CategoryService } from '@services/index';
 import { Category, Word, ListParam, Result } from '@models/index';
 import { NzMessageService } from 'ng-zorro-antd';
+import { FormComponent } from './public/form/form.component';
 
 export enum Sort {
   descend = 'DESC',
@@ -33,6 +34,8 @@ export class ListComponent implements OnInit {
   pageSize: number = 5; // 每页条数
   total: number; // 总条数
   listParams: ListParam; // 列表查询参数
+
+  @ViewChild('wordForm') form: FormComponent;
 
   constructor(
     private message: NzMessageService,
@@ -88,6 +91,7 @@ export class ListComponent implements OnInit {
           this.message.success('添加成功');
           this.getWordList();
           this.closeModal();
+          this.form.resetForm();
         }
       });
   }
@@ -103,6 +107,7 @@ export class ListComponent implements OnInit {
           this.message.success('修改成功');
           this.getWordList();
           this.closeModal();
+          this.form.resetForm();
         }
       });
   }
@@ -122,7 +127,11 @@ export class ListComponent implements OnInit {
   getWordList() {
     if (this.loading) return;
     this.loading = true;
-    this.listParams.search = this.searchText || '';
+    this.listParams = {
+      currentPage: this.currentPage - 1,
+      pageSize: this.pageSize,
+      search: this.searchText || ''
+    }
     this.wordService.getWordList(this.listParams)
       .subscribe((data: Result<Word[]>) => {
         if (data.code === 200) {

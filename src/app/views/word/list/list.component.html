@@ -54,5 +54,5 @@
           [nzFooter]="null"
           (nzAfterClose)="editWord = null"
           (nzOnCancel)="closeModal()">
-  <yc-word-form [categories]="categories" [formData]="editWord" (submitForm)="handleOk($event)"></yc-word-form>
+  <yc-word-form [categories]="categories" [formData]="editWord" (submitForm)="handleOk($event)" #wordForm></yc-word-form>
 </nz-modal>

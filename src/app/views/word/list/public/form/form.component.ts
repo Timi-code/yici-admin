@@ -50,6 +50,13 @@ export class FormComponent implements OnInit {
   }
 
   /**
+   * 重置表单
+   */
+  resetForm() {
+    this.validateForm.reset();
+  }
+
+  /**
    * 确定
    */
   handleOk() {
