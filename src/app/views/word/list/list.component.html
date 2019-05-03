@@ -6,7 +6,7 @@
     <input type="text" nz-input placeholder="请输入单词" [(ngModel)]="searchText" (keyup.enter)="getWordList()"/>
   </div>
   <div nz-col nzSpan="6" class="search-btn-wrap">
-    <button nz-button nzType="primary" [disabled]="!searchText" [nzLoading]="loading" (click)="getWordList()">搜索</button>
+    <button nz-button nzType="primary" [nzLoading]="loading" (click)="getWordList()">搜索</button>
   </div>
 </div>
 
@@ -22,9 +22,11 @@
                       (nzPageIndexChange)="getWordList()"
                       (nzPageSizeChange)="getWordList()"
                       [nzScroll]="scrollConfig">
-  <thead>
+  <thead (nzSortChange)="sort($event)">
     <tr>
-      <th nzWidth="200px">单词</th>
+      <th nzWidth="200px"
+          nzShowSort
+          nzSortKey="word">单词</th>
       <th nzWidth="200px">行业分类</th>
       <th>中文意思</th>
       <th nzWidth="200px">操作</th>

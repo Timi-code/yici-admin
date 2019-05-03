@@ -3,6 +3,11 @@ import { WordService, CategoryService } from '@services/index';
 import { Category, Word, ListParam, Result } from '@models/index';
 import { NzMessageService } from 'ng-zorro-antd';
 
+export enum Sort {
+  descend = 'DESC',
+  ascend = 'ASC'
+}
+
 @Component({
   selector: 'yc-list',
   templateUrl: './list.component.html',
@@ -15,7 +20,7 @@ export class ListComponent implements OnInit {
     this.setScrollConfig();
   }
 
-  searchText: string;
+  searchText: string = '';
   categoryType: { [key: string]: string } = {}; // 分类汉字
   visible: boolean; // 抽屉
   loading: boolean; // 保存loading
@@ -39,7 +44,8 @@ export class ListComponent implements OnInit {
     this.listParams = {
       currentPage: this.currentPage - 1,
       pageSize: this.pageSize,
-      search: this.searchText
+      search: '',
+      sort: ''
     }
     this.getWordList();
     this.getWordCategory();
@@ -102,12 +108,21 @@ export class ListComponent implements OnInit {
   }
 
   /**
+   * 单词排序
+   * @param ev 排序key : value
+   */
+  sort(ev: { key: string; value: string }) {
+    this.listParams.sort = Sort[ev.value];
+    this.getWordList();
+  }
+
+  /**
    * 获取单词列表
    */
   getWordList() {
     if (this.loading) return;
-    this.loading = true
-    this.listParams = { currentPage: this.currentPage - 1, pageSize: this.pageSize, search: this.searchText };
+    this.loading = true;
+    this.listParams.search = this.searchText || '';
     this.wordService.getWordList(this.listParams)
       .subscribe((data: Result<Word[]>) => {
         if (data.code === 200) {
@@ -116,6 +131,7 @@ export class ListComponent implements OnInit {
         }
       }, err => {
         console.log(err);
+        this.loading = false;
       }, () => {
         this.loading = false;
       });
