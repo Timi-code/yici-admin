@@ -159,6 +159,16 @@ export class ListComponent implements OnInit {
       });
   }
 
+  confirm(id: number) {
+    this.wordService.deleteWord(id)
+      .subscribe(_ => {
+        this.message.success('操作成功!');
+        this.getWordList();
+      }, _ => {
+        this.message.error('操作失败!');
+      })
+  }
+
   /**
    * 设置scrollconfig
    */

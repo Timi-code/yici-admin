@@ -22,4 +22,8 @@ export class WordService {
   updateWord(params): Observable<any> {
     return this.http.put('./api/word', params);
   }
+
+  deleteWord(id: number): Observable<any> {
+    return this.http.delete(`/api/word/${id}`, )
+  }
 }

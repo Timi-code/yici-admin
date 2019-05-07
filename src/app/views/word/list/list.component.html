@@ -40,7 +40,7 @@
       <td>
         <a (click)="editWordHandle(data)">修改</a>
         <nz-divider nzType="vertical"></nz-divider>
-        <a nz-popconfirm nzTitle="Are you sure delete this category?">删除</a>
+        <a nz-popconfirm nzTitle="Are you sure delete this word?" (nzOnConfirm)="confirm(data.id)">删除</a>
       </td>
     </tr>
   </tbody>
