@@ -60,6 +60,7 @@ export class FormComponent implements OnInit {
    * 确定
    */
   handleOk() {
+    this.validateForm.patchValue({chinese: this.validateForm.controls['chinese'].value.replace('，', ',')})
     this.submitForm.emit(this.validateForm.value);
   }
 
