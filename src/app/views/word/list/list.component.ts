@@ -3,6 +3,7 @@ import { WordService, CategoryService } from '@services/index';
 import { Category, Word, ListParam, Result } from '@models/index';
 import { NzMessageService } from 'ng-zorro-antd';
 import { FormComponent } from './public/form/form.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export enum Sort {
   descend = 'DESC',
@@ -93,6 +94,9 @@ export class ListComponent implements OnInit {
           this.closeModal();
           this.form.resetForm();
         }
+      }, (err: HttpErrorResponse) => {
+        console.log(err)
+        this.message.error(err.error.data)
       });
   }
 
@@ -162,10 +166,10 @@ export class ListComponent implements OnInit {
   confirm(id: number) {
     this.wordService.deleteWord(id)
       .subscribe(_ => {
-        this.message.success('操作成功!');
+        this.message.success('操作成功');
         this.getWordList();
       }, _ => {
-        this.message.error('操作失败!');
+        this.message.error('操作失败');
       })
   }
 
