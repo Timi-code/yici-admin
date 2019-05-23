@@ -35,6 +35,7 @@ export class ListComponent implements OnInit {
   pageSize: number = 5; // 每页条数
   total: number; // 总条数
   listParams: ListParam; // 列表查询参数
+  sortStr: Sort; // 排序
 
   @ViewChild('wordForm') form: FormComponent;
 
@@ -121,7 +122,7 @@ export class ListComponent implements OnInit {
    * @param ev 排序key : value
    */
   sort(ev: { key: string; value: string }) {
-    this.listParams.sort = Sort[ev.value];
+    this.sortStr = Sort[ev.value];
     this.getWordList();
   }
 
@@ -136,6 +137,7 @@ export class ListComponent implements OnInit {
       pageSize: this.pageSize,
       search: this.searchText || ''
     }
+    if (this.sortStr) this.listParams.sort = this.sortStr
     this.wordService.getWordList(this.listParams)
       .subscribe((data: Result<Word[]>) => {
         if (data.code === 200) {
