@@ -36,6 +36,12 @@ export class ListComponent implements OnInit {
   total: number; // 总条数
   listParams: ListParam; // 列表查询参数
   sortStr: Sort; // 排序
+  
+  get cardStyles () {
+    return {
+      'max-width': '400px'
+    }
+  }
 
   @ViewChild('wordForm') form: FormComponent;
 

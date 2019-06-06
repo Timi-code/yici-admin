@@ -29,6 +29,7 @@
           nzSortKey="word">单词</th>
       <th nzWidth="200px">行业分类</th>
       <th>中文意思</th>
+      <th>例子</th>
       <th nzWidth="200px">操作</th>
     </tr>
   </thead>
@@ -37,6 +38,9 @@
       <td>{{data.word}}</td>
       <td>{{categoryType[data.category]}}</td>
       <td>{{data.chinese}}</td>
+      <td>
+        <span nz-popover [nzTitle]="null" [nzContent]="data.examples" nzTrigger="hover" [nzOverlayStyle]="cardStyles">{{data.examples | slice:0:16}}{{data.examples ? '...' : ''}}</span>
+      </td>
       <td>
         <a (click)="editWordHandle(data)">修改</a>
         <nz-divider nzType="vertical"></nz-divider>

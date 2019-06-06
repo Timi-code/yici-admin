@@ -20,6 +20,12 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">例子</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
+      <textarea rows="3" nz-input formControlName="examples" placeholder="例子" ></textarea>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
       <nz-form-control [nzOffset]="6">
         <button nz-button nzType="primary" [disabled]="!validateForm.valid">确认</button>
       </nz-form-control>

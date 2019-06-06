@@ -6,6 +6,7 @@ export class FormData implements Word {
   word: string;
   category: number;
   chinese: string;
+  examples?: string;
 }
 
 @Component({
@@ -45,7 +46,8 @@ export class FormComponent implements OnInit {
       id: [formData.id],
       word: [formData.word, [Validators.required]],
       category: [formData.category, [Validators.required]],
-      chinese: [formData.chinese, [Validators.required]]
+      chinese: [formData.chinese, [Validators.required]],
+      examples: [formData.examples]
     });
   }
 
